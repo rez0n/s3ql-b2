@@ -15,14 +15,14 @@ To use s3ql-b2 you need kernel with FUSE module in host system.
 Command to run container:
 ```
 docker run -d --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined --stop-timeout 3600 \
-           --name nafeofcontainer \
+           --name nameofcontainer \
            -e S3QL_MODE=mount \
            -e S3QL_BUCKET=nameofyourbucket \
            -e S3QL_PREFIX=prefixinyourbucket \
            -e S3QL_ACCOUNTID=b2accountid \
            -e S3QL_APPLICATIONKEY=b2appkey \
            -v /path/to/folder/in/host/system:/mnt/s3ql:shared \
-           zdce/s3ql-b2
+           registry.gitlab.com/docks/s3ql-b2
 ```
 Here you must change:
 
