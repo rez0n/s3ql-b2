@@ -4,7 +4,7 @@ With this image you can mount your Backblaze B2 Cloud Storage like a regular fil
 
 ----------
 
-**Build status · **[![build status](https://gitlab.com/docks/s3ql-b2/badges/master/build.svg)](https://gitlab.com/docks/s3ql-b2/commits/master) 
+**Build status ·** [![build status](https://gitlab.com/docks/s3ql-b2/badges/master/build.svg)](https://gitlab.com/docks/s3ql-b2/commits/master) 
 
 ----------
 
