@@ -1,0 +1,5 @@
+[b2]
+storage-url: b2://S3QL_BUCKET/S3QL_PREFIX
+backend-login: S3QL_ACCOUNTID
+backend-password: S3QL_APPLICATIONKEY
+#fs-passphrase: S3QL_PASSPHRASE
