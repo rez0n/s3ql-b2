@@ -1,13 +1,15 @@
-[![build status](https://gitlab.com/docks/s3ql-b2/badges/master/build.svg)](https://gitlab.com/docks/s3ql-b2/commits/master) 
+[![build status](https://gitlab.com/docks/s3ql-b2/badges/master/build.svg)](https://gitlab.com/docks/s3ql-b2/commits/master) [![coverage report](https://gitlab.com/docks/s3ql-b2/badges/master/coverage.svg)](https://gitlab.com/docks/s3ql-b2/commits/master)
 
 With this image you can mount your Backblaze B2 Cloud Storage like a regular file system into host through FUSE.
 
 ----------
 **Requirements**
+
 To use s3ql-b2 you need kernel with FUSE module in host system. 
 
 ----------
 **Run**
+
 Command to run container:
 ```
 docker run -d --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined --stop-timeout 3600 \
@@ -33,6 +35,7 @@ Here you must change:
 ----------
 
 **Disclaimer**
+
 Use with caution! There are no guarantees, that image don't have bugs. :)
 
 ----------
