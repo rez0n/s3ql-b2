@@ -35,9 +35,9 @@ _config() {
 
 _make() {
     if [ "$S3QL_PASSPHRASE" != "" ]; then
-        echo $S3QL_PASSPHRASE | mkfs.s3ql --authfile /etc/s3ql/s3ql-b2.auth --max-obj-size $S3QL_MAXOBJSIZE --force b2://$S3QL_BUCKET/$S3QL_PREFIX
+        echo $S3QL_PASSPHRASE | mkfs.s3ql --authfile /etc/s3ql/s3ql-b2.auth --max-obj-size $S3QL_MAXOBJSIZE b2://$S3QL_BUCKET/$S3QL_PREFIX
     else
-        mkfs.s3ql --authfile /etc/s3ql/s3ql-b2.auth --max-obj-size $S3QL_MAXOBJSIZE --plain --force b2://$S3QL_BUCKET/$S3QL_PREFIX
+        mkfs.s3ql --authfile /etc/s3ql/s3ql-b2.auth --max-obj-size $S3QL_MAXOBJSIZE --plain b2://$S3QL_BUCKET/$S3QL_PREFIX
     fi
 }
 
