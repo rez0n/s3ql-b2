@@ -26,22 +26,29 @@ _config() {
     sed -i "s/S3QL_PREFIX/$S3QL_PREFIX/" /etc/s3ql/s3ql-b2.auth
     sed -i "s/S3QL_ACCOUNTID/$S3QL_ACCOUNTID/" /etc/s3ql/s3ql-b2.auth
     sed -i "s/S3QL_APPLICATIONKEY/$S3QL_APPLICATIONKEY/" /etc/s3ql/s3ql-b2.auth
-    sed -i "s/S3QL_PASSPHRASE/$S3QL_PASSPHRASE/" /etc/s3ql/s3ql-b2.auth
-    if [ $1 = "withpass"]; then
+    if [ "$S3QL_PASSPHRASE" != "" ]; then
+        sed -i "s/#fs-passphrase/fs-passphrase/" /etc/s3ql/s3ql-b2.auth
         sed -i "s/S3QL_PASSPHRASE/$S3QL_PASSPHRASE/" /etc/s3ql/s3ql-b2.auth
+    fi
+    touch /etc/s3ql/configured.flag
+}
+
+_make() {
+    if [ "$S3QL_PASSPHRASE" != "" ]; then
+        echo $S3QL_PASSPHRASE | mkfs.s3ql --authfile /etc/s3ql/s3ql-b2.auth --max-obj-size $S3QL_MAXOBJSIZE --force b2://$S3QL_BUCKET/$S3QL_PREFIX
+    else
+        mkfs.s3ql --authfile /etc/s3ql/s3ql-b2.auth --max-obj-size $S3QL_MAXOBJSIZE --plain --force b2://$S3QL_BUCKET/$S3QL_PREFIX
     fi
 }
 
 trap _term SIGTERM
 
 if [ ! -e /etc/s3ql/configured.flag ]; then
-    if [ $S3QL_MODE = "make" ]; then
+    if [ "$S3QL_MODE" = "make" ]; then
         _config
-        mkfs.s3ql --authfile /etc/s3ql/s3ql-b2.auth --max-obj-size 10240 --plain --force b2://$S3QL_BUCKET/$S3QL_PREFIX
-        touch /etc/s3ql/configured.flag
-    elif [ $S3QL_MODE = "mount" ]; then
-        _config withpass
-        touch /etc/s3ql/configured.flag
+        _make
+    elif [ "$S3QL_MODE" = "mount" ]; then
+        _config
     else
         echo "Unknown S3QL_MODE."
         exit 1

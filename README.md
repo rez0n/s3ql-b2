@@ -19,6 +19,13 @@ docker run -d --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unc
            -e S3QL_PREFIX=prefixinyourbucket \
            -e S3QL_ACCOUNTID=b2accountid \
            -e S3QL_APPLICATIONKEY=b2appkey \
+           -e S3QL_PASSPHRASE=secretpass \
+           -e S3QL_MAXOBJSIZE=10240 \
+           -e S3QL_CACHESIZE=20971520 \
+           -e S3QL_MAXCACHEENTRIES=50000 \
+           -e S3QL_COMPRESS=lzma-2 \
+           -e S3QL_THREADS=2 \
+           -e S3QL_METAINTERVAL=86400 \
            -v /path/to/folder/in/host/system:/mnt/s3ql:shared \
            registry.gitlab.com/docks/s3ql-b2
 ```
@@ -30,6 +37,13 @@ Here you must change:
 - `S3QL_PREFIX` name of prefix (folder) inside your bucket, where file system will be created or from where will be mounted
 - `S3QL_ACCOUNTID` your Backblaze B2 Cloud Storage Account ID
 - `S3QL_APPLICATIONKEY` your Backblaze B2 Cloud Storage Application Key
+- `S3QL_PASSPHRASE` passphrase, used to encrypt keys in storage. If not set, then files in storage will be unencrypted
+- `S3QL_MAXOBJSIZE` maximum size of storage objects in KiB. Files bigger than this will be spread over multiple objects in the storage backend
+- `S3QL_CACHESIZE` cache size in KiB
+- `S3QL_MAXCACHEENTRIES` maximum number of entries in cache
+- `S3QL_COMPRESS` compression algorithm and compression level to use when storing new data. Algorithm may be lzma, bzip2, zlib, or none. Level may be any integer from 0 (fastest) to 9 (slowest)
+- `S3QL_THREADS` number of parallel upload threads to use
+- `S3QL_METAINTERVAL` interval in seconds between complete metadata uploads. Set to 0 to disable
 - `/path/to/folder/in/host/system` path to folder in host, where will be mounted FUSE file system
 
 ----------
