@@ -1,5 +1,3 @@
-[![build status](https://gitlab.com/docks/s3ql-b2/badges/master/build.svg)](https://gitlab.com/docks/s3ql-b2/commits/master) [![coverage report](https://gitlab.com/docks/s3ql-b2/badges/master/coverage.svg)](https://gitlab.com/docks/s3ql-b2/commits/master)
-
 With this image you can mount your Backblaze B2 Cloud Storage like a regular file system into host through FUSE.
 
 ----------
@@ -57,3 +55,4 @@ Use with caution! There are no guarantees, that image don't have bugs. :)
 
 - s3ql: https://github.com/s3ql/s3ql
 - Backblaze B2 backend: https://github.com/sylvainlehmann/s3ql
+- Original author of this script - https://gitlab.com/docks/s3ql-b2
