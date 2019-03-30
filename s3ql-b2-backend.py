@@ -66,7 +66,7 @@ class Backend(AbstractBackend, metaclass=ABCDocstMeta):
 
         self._login()
 
-        self._connect_bucket(self.bucket_name)
+        self._connect_bucket(self.bucket_name, self.bucket_id)
 
     def _do_request(self, method, path, conn, headers=None, body=None, auth_token=None, download_body=True,
                     body_size=None):
@@ -187,31 +187,33 @@ class Backend(AbstractBackend, metaclass=ABCDocstMeta):
             self.auth_token = j['authorizationToken']
             self.download_host = download_url.hostname
 
+            """ Define restricted bucketId (in case ApplicationKey used instead AccountId) """
+            self.bucket_id = j['allowed']['bucketId']
+
             self.conn_api = HTTPConnection(
                 self.api_host, 443, ssl_context=self.ssl_context)
             self.conn_download = HTTPConnection(
                 self.download_host, 443, ssl_context=self.ssl_context)
 
-    def _connect_bucket(self, bucket_name):
-        """
-        Get id of bucket_name
-        """
-
+    def _connect_bucket(self, bucket_name, bucket_id):
         log.debug('started with %s' % (bucket_name))
-
-        resp, body = self._do_request(
-            'GET', '/b2api/v1/b2_list_buckets?accountId=%s' % self.account_id, self.conn_api)
-        bucket_id = None
-        j = json.loads(str(body, encoding='UTF-8'))
-
-        for b in j['buckets']:
-            if b['bucketName'] == bucket_name:
-                bucket_id = b['bucketId']
-
         if bucket_id is None:
-            raise DanglingStorageURLError(bucket_name)
-        self.bucket_id = bucket_id
-        self.bucket_name = bucket_name
+            """ Get id of bucket_name """
+            resp, body = self._do_request(
+                'GET', '/b2api/v1/b2_list_buckets?accountId=%s' % self.account_id, self.conn_api)
+            bucket_id = None
+            j = json.loads(str(body, encoding='UTF-8'))
+
+            for b in j['buckets']:
+                if b['bucketName'] == bucket_name:
+                    bucket_id = b['bucketId']
+
+            if bucket_id is None:
+                raise DanglingStorageURLError(bucket_name)
+            self.bucket_id = bucket_id
+            self.bucket_name = bucket_name
+        else:
+            pass
 
     def _add_meta_headers(self, headers, metadata):
         self._add_meta_headers_s3(headers, metadata,
