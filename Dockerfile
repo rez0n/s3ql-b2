@@ -18,21 +18,21 @@ WORKDIR /tmp/s3ql
 
 # install s3ql with backblaze b2 patch
 RUN apt-get update && \
-    apt-get -y --no-install-recommends install git wget psmisc procps fuse cython3 python3-setuptools python3-llfuse libsqlite3-dev python3-requests python3-crypto python3-dugong python3-defusedxml python3-apsw python3-pytest python3-pytest-catchlog python3-pytest-cov python3-dev gcc && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    git clone https://github.com/s3ql/s3ql.git /tmp/s3ql && \
-    wget https://github.com/sylvainlehmann/s3ql/raw/master/src/s3ql/backends/backblaze.py -O /tmp/s3ql/src/s3ql/backends/backblaze.py && \
-    touch ./src/s3ql/backends/backblaze.py && \
-    sed -i 's/import local, s3, gs, s3c, swift, rackspace, swiftks/import local, s3, gs, s3c, swift, rackspace, swiftks, backblaze/' ./src/s3ql/backends/__init__.py && \
-    sed -i 's/rackspace.Backend }/rackspace.Backend,/' ./src/s3ql/backends/__init__.py && \
-    sed -i "/rackspace.Backend/a \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 'b2': backblaze.Backend }" ./src/s3ql/backends/__init__.py && \
-    python3 setup.py build_cython && \
-    python3 setup.py build_ext --inplace && \
-    python3 -m pytest tests/ --cov=s3ql && \
-    python3 setup.py install && \
-    rm -rf /tmp/s3ql && \
-    mkdir /mnt/s3ql
+   apt-get -y --no-install-recommends install git wget psmisc procps fuse cython3 python3-setuptools python3-llfuse libsqlite3-dev python3-requests python3-crypto python3-dugong python3-defusedxml python3-apsw python3-pytest python3-pytest-catchlog python3-pytest-cov python3-dev gcc && \
+   apt-get clean && \
+   rm -rf /var/lib/apt/lists/* && /bin/mkdir -p /tmp/s3ql && \
+   git clone -b release-2.25 https://github.com/s3ql/s3ql.git /tmp/s3ql && \
+   wget https://raw.githubusercontent.com/rez0n/s3ql-b2/master/s3ql-b2-backend.py -O /tmp/s3ql/src/s3ql/backends/backblaze.py && \
+   touch ./src/s3ql/backends/backblaze.py && \
+   sed -i 's/import local, s3, gs, s3c, swift, rackspace, swiftks/import local, s3, gs, s3c, swift, rackspace, swiftks, backblaze/' ./src/s3ql/backends/__init__.py && \
+   sed -i 's/rackspace.Backend }/rackspace.Backend,/' ./src/s3ql/backends/__init__.py && \
+   sed -i "/rackspace.Backend/a \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 'b2': backblaze.Backend }" ./src/s3ql/backends/__init__.py && \
+   python3 setup.py build_cython && \
+   python3 setup.py build_ext --inplace && \
+   python3 -m pytest tests/ --cov=s3ql && \
+   python3 setup.py install && \
+   rm -rf /tmp/s3ql && \
+   mkdir /mnt/s3ql
 
 # copy auth information and wrapper to container
 COPY s3ql-b2.auth /etc/s3ql/s3ql-b2.auth
